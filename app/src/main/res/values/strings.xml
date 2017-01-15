@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TowMe</string>
+    <string name="facebook_app_id">1839536472960571</string>
+    <string name="google_maps_app_id">AIzaSyDVrZ6LMUCTKfGy72Z7arosz7MvSOsxcwo</string>
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

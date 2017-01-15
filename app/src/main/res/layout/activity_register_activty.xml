@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register_activty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.hadad.towme.RegisterActivty">
+
+    <TextView
+        android:id="@+id/ask_4_parms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="(Optional) *It is better for us to help you if you give us extra information:"/>
+
+    <TextView
+        android:textSize="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Car weight"
+        android:layout_below="@+id/ask_4_parms"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="23dp"
+        android:id="@+id/carWeightText"
+        android:textStyle="bold|italic"/>
+
+
+    <TextView
+        android:textSize="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Car Type"
+        android:layout_below="@+id/carWeightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="23dp"
+        android:id="@+id/carTypeText"
+        android:textStyle="bold|italic"/>
+
+
+    <EditText android:id="@+id/carWeightEditText"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:hint="Car weight in KG(Optional)"
+        android:textSize="16dp"
+        android:layout_alignBaseline="@+id/carWeightText"
+        android:layout_alignBottom="@+id/ask_4_parms"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:inputType="number"/>
+
+    <Spinner
+        android:id="@+id/carTypeSpinner"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/carTypeText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/carPicImageView"
+        android:src="@drawable/default_car"
+        android:padding="6dp"
+        android:cropToPadding="true"
+        android:background="@drawable/border"
+        android:layout_alignTop="@+id/carPicText"
+        android:layout_toLeftOf="@+id/CameraImageView"
+        android:layout_toStartOf="@+id/CameraImageView"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:text="please give a picture of your car"
+        android:id="@+id/carPicText"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/carTypeSpinner"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/CameraImageView"
+        android:src="@drawable/camera"
+        android:padding="8dp"
+        android:cropToPadding="true"
+        android:background="@drawable/border"
+        android:layout_alignBottom="@+id/carPicImageView"
+        android:layout_toRightOf="@+id/carPicText"
+        android:layout_toEndOf="@+id/carPicText" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:text="Button"
+        android:textColor="#0DC6FF"
+        android:textSize="15sp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/buttonshape"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/carPicImageView"
+        android:layout_toLeftOf="@+id/CameraImageView"
+        android:layout_toStartOf="@+id/CameraImageView" />
+</RelativeLayout>
