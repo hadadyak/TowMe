@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivty">
+        <activity android:name=".Activities.LoginActivty">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,7 @@
 
         <activity android:name=".Activities.RegisterActivty" />
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".CameraActivity"/>
+        <activity android:name=".Activities.CameraActivity"/>
 
     </application>
 
