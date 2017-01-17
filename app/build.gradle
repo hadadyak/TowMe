@@ -29,7 +29,7 @@ dependencies {
     // Android SDK
     // Audience Network SDK. Only versions 4.6.0 and above are available
     // Account Kit
-    
+
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -42,5 +42,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-ddb:2.2.+'
+
     testCompile 'junit:junit:4.12'
 }
