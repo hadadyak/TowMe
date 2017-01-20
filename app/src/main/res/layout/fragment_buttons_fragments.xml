@@ -8,8 +8,8 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/Bt1"
-            android:text="Bt1"
+            android:id="@+id/rank_bt"
+            android:text="Rank"
             android:textColor="#0DC6FF"
             android:textSize="15sp"
             android:layout_width="120dp"
@@ -17,8 +17,8 @@
             android:background="@drawable/buttonshape"/>
 
         <Button
-            android:id="@+id/Bt3"
-            android:text="Bt3"
+            android:id="@+id/price_bt"
+            android:text="Price"
             android:textColor="#0DC6FF"
             android:textSize="15sp"
             android:layout_width="120dp"
@@ -29,8 +29,8 @@
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:id="@+id/Bt2"
-            android:text="Bt2"
+            android:id="@+id/dist_bt"
+            android:text="Distance"
             android:textColor="#0DC6FF"
             android:textSize="15sp"
             android:layout_centerHorizontal="true"

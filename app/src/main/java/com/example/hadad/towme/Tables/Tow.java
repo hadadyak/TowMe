@@ -24,6 +24,7 @@ public  class Tow  {
     private String firstName;
     private String lastName;
     private String Mail;
+
 //    private int Telephone;
     //bitmap Picture;
     //  ArrayList<Coment> Comments;
@@ -38,8 +39,6 @@ public  class Tow  {
     public float getRank() {
         return Rank;
     }
-
-
 
     @DynamoDBAttribute(attributeName ="Mail")
     public String getMail() {

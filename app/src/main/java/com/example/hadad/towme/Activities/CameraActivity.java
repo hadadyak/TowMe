@@ -158,7 +158,6 @@ public class CameraActivity extends Activity {
     {
         if(mCamera == null){	//after pause, must restart camera and preview
             //mCamera.setPreviewCallback(null);
-            mCamera.open(0);
             setContentView(R.layout.activity_camera);
             mCamera = getCameraInstance();
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){

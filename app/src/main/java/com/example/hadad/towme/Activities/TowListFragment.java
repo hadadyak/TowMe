@@ -1,6 +1,7 @@
 package com.example.hadad.towme.Activities;
 
 
+import com.example.hadad.towme.Others.TowList;
 import com.example.hadad.towme.R;
 
 import android.content.Context;
@@ -14,8 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.hadad.towme.Others.MyTowItemRecyclerViewAdapter;
-import com.example.hadad.towme.dummy.DummyContent;
-import com.example.hadad.towme.dummy.DummyContent.DummyItem;
+import com.example.hadad.towme.Tables.Tow;
 
 import java.util.List;
 
@@ -32,6 +32,7 @@ public class TowListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private TowList towList = new TowList();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,7 +74,7 @@ public class TowListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyTowItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyTowItemRecyclerViewAdapter(towList.ITEMS, mListener));
         }
         return view;
     }
@@ -108,6 +109,6 @@ public class TowListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Tow item);
     }
 }

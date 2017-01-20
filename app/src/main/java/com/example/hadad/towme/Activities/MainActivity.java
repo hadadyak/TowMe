@@ -11,7 +11,7 @@ import com.example.hadad.towme.Activities.TowListFragment.OnListFragmentInteract
 import com.example.hadad.towme.Activities.ButtonsFragments.OnButtonFragmentInteractionListener;
 import com.example.hadad.towme.DynamoDB.AmazonClientManager;
 import com.example.hadad.towme.R;
-import com.example.hadad.towme.dummy.DummyContent;
+import com.example.hadad.towme.Tables.Tow;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
@@ -47,12 +47,46 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Tow item) {
         Log.d("got click","onListFragmentInteraction");
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onPriceClick() {
+        ButtonsFragments buttonsFrag = (ButtonsFragments)
+                getSupportFragmentManager().findFragmentById(R.id.frag_buttons);
+/*
+        if (buttonsFrag != null) {
+            buttonsFrag.updateArticleView(position);
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+
+            // Create fragment and give it an argument for the selected article
+            ArticleFragment newFragment = new ArticleFragment();
+            Bundle args = new Bundle();
+            args.putInt(ArticleFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+        */
+    }
+
+    @Override
+    public void onRankClick() {
+
+    }
+
+    @Override
+    public void onDistanceClick() {
 
     }
 }

@@ -1,0 +1,24 @@
+TO - DO List:
+
+ Register Activity:
+    -fix camera activty yakir
+    -fix image select from gallary yakir
+    -create new user and save in db omer
+
+ Main Activity:
+    map fragment:
+        -pointer to our location omer
+        -print in the map tows omer
+
+    buttons fragment:
+        -implement button order by price omer
+        -implement button order by distance omer
+        -implement button order by rank omer
+        -make a way for communicate with list fragment yakir
+
+    List fragment:
+        -implement the tow item yakir
+        -implement order list
+        -animation for fragments yakir
+
+
