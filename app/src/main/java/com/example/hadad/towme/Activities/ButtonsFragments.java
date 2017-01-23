@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,11 @@ import com.example.hadad.towme.R;
 public class ButtonsFragments extends Fragment {
 
     private OnButtonFragmentInteractionListener mListener;
-
+    enum SortBy{
+        PRICE,
+        DISTANCE,
+        RANK
+    }
     public ButtonsFragments() {
         // Required empty public constructor
     }
@@ -47,25 +52,25 @@ public class ButtonsFragments extends Fragment {
 
         Button price = (Button) view.findViewById(R.id.price_bt);
         price.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onPriceClick();
+            public void onClick(View v) {
+                Log.d("Click pressed","Price");
+                mListener.onButtonInteractionClick(SortBy.PRICE);
             }
         });
 
-        Button distance = (Button) view.findViewById(R.id.price_bt);
-        price.setOnClickListener(new View.OnClickListener() {
+        Button distance = (Button) view.findViewById(R.id.dist_bt);
+        distance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onDistanceClick();
+                mListener.onButtonInteractionClick(SortBy.DISTANCE);
             }
         });
 
-        Button rank = (Button) view.findViewById(R.id.price_bt);
-        price.setOnClickListener(new View.OnClickListener() {
+        Button rank = (Button) view.findViewById(R.id.rank_bt);
+        rank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onRankClick();
+                mListener.onButtonInteractionClick(SortBy.RANK);
             }
         });
         return view;
@@ -106,9 +111,7 @@ public class ButtonsFragments extends Fragment {
      */
     public interface OnButtonFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onPriceClick();
-        void onDistanceClick();
-        void onRankClick();
+        void onButtonInteractionClick(SortBy sort);
     }
 
 }

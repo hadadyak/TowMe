@@ -12,6 +12,12 @@ public class Constants {
     public static final String Comment_TABLE = "Comments";
     public static final String TRANSACTION_TABLE_NAME = "Transactions";
 
+    public enum MainActivityState{
+        DIVIDED,
+        MAP,
+        LIST
+    }
+
     public enum DynamoDBManagerType {
         ADD_TRANSACTION,
         GET_USER_BY_NAME,
@@ -19,8 +25,11 @@ public class Constants {
         CREATE_TABLE,
         INSERT_USER,
         LIST_TOW,
-        CLEAN_UP,
+        DELETE_USER_TABLE,
         LIST_COMMENTS,
-        ADD_COMMENTS
+        ADD_COMMENTS,
+        ORDERBYPRICE,
+        ORDERBYDISTANCE,
+        ORDERBYRANK
     }
 }

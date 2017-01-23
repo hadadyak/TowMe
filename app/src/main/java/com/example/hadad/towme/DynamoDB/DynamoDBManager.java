@@ -2,6 +2,7 @@ package com.example.hadad.towme.DynamoDB;
 
 import android.util.Log;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.example.hadad.towme.Tables.*;
 import com.example.hadad.towme.Others.*;
 import com.example.hadad.towme.Activities.*;
@@ -21,8 +22,14 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.google.android.gms.plus.People;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Comparator.comparing;
 
 /**
  * Created by Omer on 16-Jan-17.
@@ -31,9 +38,10 @@ import java.util.ArrayList;
 
 public class DynamoDBManager {
     private static final String TAG = "DynamoDBManager";
-    private static int idCounter=1;
+    private static int idCounter = 1;
+
     public static void createTable() {
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         KeySchemaElement kse = new KeySchemaElement().withAttributeName(
                 "Id").withKeyType(KeyType.HASH);
         AttributeDefinition ad = new AttributeDefinition().withAttributeName(
@@ -42,7 +50,7 @@ public class DynamoDBManager {
                 .withReadCapacityUnits(10l).withWriteCapacityUnits(5l);
 
         CreateTableRequest request = new CreateTableRequest()
-                .withTableName(Constants.User_TABLE_NAME )
+                .withTableName(Constants.User_TABLE_NAME)
                 .withKeySchema(kse).withAttributeDefinitions(ad)
                 .withProvisionedThroughput(pt);
 
@@ -52,21 +60,21 @@ public class DynamoDBManager {
             Log.d(TAG, "Create request response successfully recieved");
         } catch (AmazonServiceException ex) {
             Log.e(TAG, "Error sending create table request", ex);
-            MainActivity.clientManager
+            SplashActivity.clientManager
                     .wipeCredentialsOnAuthError(ex);
         }
     }
+
     /*
        * Retrieves the table description and returns the table status Telephoneas a string.
        */
     public static String getTestTableStatus() {
 
         try {
-            AmazonDynamoDBClient ddb = MainActivity.clientManager
-                    .ddb();
+            AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
 
             DescribeTableRequest request = new DescribeTableRequest()
-                    .withTableName(Constants.User_TABLE_NAME );
+                    .withTableName(Constants.User_TABLE_NAME);
             DescribeTableResult result = ddb.describeTable(request);
 
             String status = result.getTable().getTableStatus();
@@ -74,7 +82,7 @@ public class DynamoDBManager {
 
         } catch (ResourceNotFoundException e) {
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager
+            SplashActivity.clientManager
                     .wipeCredentialsOnAuthError(ex);
         }
 
@@ -84,59 +92,100 @@ public class DynamoDBManager {
     /*
         * Inserts ten users with userNo from 1 to 10 and random names.
         */
-    public static void insertUsers(String firstName,String LastName,String Mail,Long Telephone) {
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+    public static void insertUsers(User user) {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         try {
-            User user= new User();
-            //------> detailes that should come from the facebook login activity
-            user.setId(idCounter++);//start from id 1 and each insertion add new id ++
-            user.setFirstName(firstName);
-            user.setLastName(LastName);
-            user.setMail(Mail);
-            user.setTelephone(Telephone);
 
+            //------> detailes that should come from the facebook login activity
             Log.d(TAG, "Inserting user");
             mapper.save(user);
             Log.d(TAG, "User was inserted");
-
         } catch (AmazonServiceException ex) {
             Log.e(TAG, "Error inserting users");
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
+
+    public static ArrayList<Tow> OrderByPrice() {
+        ArrayList<Tow> tows = getTowList();
+               /* Sorting of arraylist using Collections.sort*/
+        Collections.sort(tows, new PriceComparator());
+        return tows;
+    }
+
+    //normaliezed all distance of the tows to current user (y-y and x-x)
+    public static ArrayList<Tow> nnormalizedDistaceVector(ArrayList<Tow> tows,User user) {
+        for (Tow tow:tows) {
+            tow.setX(tow.getX()-user.getX());
+            tow.setX(tow.getY()-user.getY());
+        }
+        return tows;
+    }
+    public static ArrayList<Tow> SortByDistance(User user){
+        ArrayList<Tow> tows = nnormalizedDistaceVector(getTowList(),user); //nomaleiad according to current user
+               /* Sorting of arraylist using Collections.sort*/
+        Collections.sort(tows, new DistanceComparator());
+        return tows;
+    }
+
+    public static ArrayList<Tow> OrderByRank(){
+        ArrayList<Tow> tows = getTowList();
+               /* Sorting of arraylist using Collections.sort*/
+        Collections.sort(tows, new RankeComparator());
+        return tows;
+    }
+    public static ArrayList<Tow> SortByRank(ArrayList<Tow> tows){
+        Collections.sort(tows, new RankeComparator());
+        return tows;
+    }
+    public static ArrayList<Tow> SortByPrice(ArrayList<Tow> tows){
+        Collections.sort(tows, new PriceComparator());
+        return tows;
+    }
+
+
     /*
        * Scans the table and returns the list of tow.
        */
     public static ArrayList<Tow> getTowList() {
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper2 = new DynamoDBMapper(ddb);
         DynamoDBScanExpression scanExpression2 = new DynamoDBScanExpression();
         try {
             PaginatedScanList<Tow> result = mapper2.scan(Tow.class, scanExpression2);
             ArrayList<Tow> resultList = new ArrayList<Tow>();
             for (Tow up : result) {
-                Tow temp=new Tow();
-                temp.setFirstName(up.getFirstName());
-                temp.setId(up.getId());
-//                temp.setTelephone(up.getTelephone());
                 resultList.add(up);
             }
             return resultList;
-
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
-
         return null;
     }
-
+    public static ArrayList<Comment> getCommentList() {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
+        DynamoDBMapper mapper2 = new DynamoDBMapper(ddb);
+        DynamoDBScanExpression scanExpression2 = new DynamoDBScanExpression();
+        try {
+            PaginatedScanList<Comment> result = mapper2.scan(Comment.class, scanExpression2);
+            ArrayList<Comment> resultList = new ArrayList<Comment>();
+            for (Comment up : result) {
+                resultList.add(up);
+            }
+            return resultList;
+        } catch (AmazonServiceException ex) {
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
+        }
+        return null;
+    }
     /*
     * Retrieves all of the attribute/value pairs for the specified user.
     */
     public static User getUser(int id) {
 
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
@@ -145,20 +194,21 @@ public class DynamoDBManager {
             return user;
 
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
 
         return null;
     }
+
     public static void insertTransaction(int id) {
-        AmazonDynamoDBClient ddb = MainActivity.clientManager
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager
                 .ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
-            Transaction transaction= new Transaction();
-            if(id==0)
-                id=10; //default if there is no id
+            Transaction transaction = new Transaction();
+            if (id == 0)
+                id = 10; //default if there is no id
             transaction.setId(id);
             transaction.setPrice(100); //just default value
             Log.d(TAG, "Inserting transaction");
@@ -167,19 +217,20 @@ public class DynamoDBManager {
 
         } catch (AmazonServiceException ex) {
             Log.e(TAG, "Error inserting transaction");
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
-    public static User getUserByName(String userName){
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+
+    public static User getUserByName(String userName) {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         // DynamoDBMapperConfig config=new DynamoDBMapperConfig();
-        User user=new User();
-        if(userName==null)
+        User user = new User();
+        if (userName == null)
             user.setFirstName("yakir");
         // user.setId(99);
         User Answer = mapper.load(user);
-        if(Answer!=null)
+        if (Answer != null)
             System.out.println(" " + Answer.getFirstName() + " " + Answer.getId());
         else
             System.out.println("error the query did not succed");
@@ -191,16 +242,16 @@ public class DynamoDBManager {
 */
     public static Comment getComment(int id) {
 
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
-            Comment comment= mapper.load(Comment .class, id);
+            Comment comment = mapper.load(Comment.class, id);
 
-            return comment ;
+            return comment;
 
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
 
         return null;
@@ -209,19 +260,19 @@ public class DynamoDBManager {
     /*
  * Inserts ten users with userNo from 1 to 10 and random names.
  */
-    public static void insertComment(String commentStr,int id) {
-        AmazonDynamoDBClient ddb = MainActivity.clientManager
+    public static void insertComment(String commentStr, int id) {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager
                 .ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
 
-            Comment comment= new Comment();
-            if(id==0)
-                id=10;
+            Comment comment = new Comment();
+            if (id == 0)
+                id = 10;
             comment.setId(id);
-            if(commentStr==null)
-                commentStr="exapmle comment";
+            if (commentStr == null)
+                commentStr = "exapmle comment";
             comment.setComment(commentStr);
 
             Log.d(TAG, "Inserting comment");
@@ -230,7 +281,7 @@ public class DynamoDBManager {
 
         } catch (AmazonServiceException ex) {
             Log.e(TAG, "Error inserting comment");
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
 
@@ -239,46 +290,48 @@ public class DynamoDBManager {
     */
     public static void updateUser(User updateUser) {
 
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
             mapper.save(updateUser);
 
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
+
     /*
    * Deletes the specified user and all of its attribute/value pairs.
    */
     public static void deleteUser(User deleteUser) {
 
-        AmazonDynamoDBClient ddb = MainActivity.clientManager.ddb();
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
             mapper.delete(deleteUser);
 
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
+
     /*
   * Deletes the test table and all of its users and their attribute/value
   * pairs.
   */
     public static void cleanUp() {
 
-        AmazonDynamoDBClient ddb = MainActivity.clientManager
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager
                 .ddb();
 
-        DeleteTableRequest request = new DeleteTableRequest().withTableName(Constants.User_TABLE_NAME );
+        DeleteTableRequest request = new DeleteTableRequest().withTableName(Constants.User_TABLE_NAME);
         try {
             ddb.deleteTable(request);
 
         } catch (AmazonServiceException ex) {
-            MainActivity.clientManager.wipeCredentialsOnAuthError(ex);
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
     }
 }

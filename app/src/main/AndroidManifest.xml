@@ -40,6 +40,10 @@
         <activity android:name=".Activities.RegisterActivty" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.CameraActivity" />
+        <activity
+            android:name=".Activities.TowProfile"
+            android:label="@string/title_activity_tow_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

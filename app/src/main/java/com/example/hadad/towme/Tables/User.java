@@ -12,33 +12,53 @@ import com.example.hadad.towme.Others.Constants;
 
 @DynamoDBTable(tableName = Constants.User_TABLE_NAME )
 public  class User {
-    private int Id;
+    private Long Id;
     private String firstName;
     private String lastName;
     private String Mail;
     private Long Telephone;
     private int carWeight;
-    private int carType;
+    private String carType;
+    private float x;
+    private float y;
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+
 //    private ArrayList<Tow> TowsAvailable;
     //   private ArrayList<Tow> HistoryTows;
     //  private bitmap Picture;
 
 
     @DynamoDBHashKey(attributeName = "Id") //primary key
-    public int getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(int Id) {
+    public void setId(Long Id) {
         this.Id = Id;
     }
 
     @DynamoDBAttribute(attributeName = "carType")
-    public int getcarType() {
+    public String getcarType() {
         return carType;
     }
 
-    public void setcarType(int carType) {
+    public void setcarType(String carType) {
         this.carType = carType;
     }
 

@@ -7,6 +7,7 @@ android {
         applicationId "com.example.hadad.towme"
         minSdkVersion 15
         targetSdkVersion 25
+       // multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -46,6 +47,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-ddb:2.2.+'
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
 }

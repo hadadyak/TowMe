@@ -14,15 +14,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.hadad.towme.R;
+import com.example.hadad.towme.Tables.User;
 
 
 public class RegisterActivty extends AppCompatActivity {
 
+    private String carType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +38,7 @@ public class RegisterActivty extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-                Toast.makeText(parent.getContext(),"OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-                        Toast.LENGTH_SHORT).show();
+                carType = parent.getItemAtPosition(pos).toString();
             }
 
             @Override
@@ -66,6 +68,9 @@ public class RegisterActivty extends AppCompatActivity {
         Button saveBt = (Button)findViewById(R.id.saveButton);
         saveBt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                User user = new User();
+                user.setcarWeight(Integer.parseInt(((EditText)findViewById(R.id.carWeightEditText)).getText().toString()));
+                user.setcarType(carType);
                 Intent intent = new Intent(RegisterActivty.this, MainActivity.class);
                 startActivity(intent);
             }

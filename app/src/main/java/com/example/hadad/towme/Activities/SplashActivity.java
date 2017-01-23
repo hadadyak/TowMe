@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.hadad.towme.DynamoDB.AmazonClientManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -16,10 +17,12 @@ public class SplashActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     ProfileTracker fbProfileTracker;
+    public static AmazonClientManager clientManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        clientManager = new AmazonClientManager(this);
         callbackManager = CallbackManager.Factory.create();
         fbProfileTracker = new ProfileTracker() {
             @Override

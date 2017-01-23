@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.hadad.towme.RegisterActivty">
+    tools:context="com.example.hadad.towme.Activities.RegisterActivty">
 
     <TextView
         android:id="@+id/ask_4_parms"

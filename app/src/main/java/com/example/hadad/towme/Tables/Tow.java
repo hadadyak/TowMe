@@ -24,6 +24,36 @@ public  class Tow  {
     private String firstName;
     private String lastName;
     private String Mail;
+    private float x;
+    private float y;
+    String PicUrl;
+    @DynamoDBAttribute(attributeName ="PicUrl")
+    public String getPicUrl() {
+        return PicUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        PicUrl = picUrl;
+    }
+
+    @DynamoDBAttribute(attributeName ="x")
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+    @DynamoDBAttribute(attributeName ="y")
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+
 
 //    private int Telephone;
     //bitmap Picture;
@@ -39,6 +69,8 @@ public  class Tow  {
     public float getRank() {
         return Rank;
     }
+
+
 
     @DynamoDBAttribute(attributeName ="Mail")
     public String getMail() {

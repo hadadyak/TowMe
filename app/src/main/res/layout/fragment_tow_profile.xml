@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.hadad.towme.Activities.TowProfile$PlaceholderFragment">
+    <ImageView
+        android:id="@+id/profile_image_tow"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="20dp"
+        android:layout_below="@id/profile_image_tow"
+        android:layout_margin="@dimen/appbar_padding_top"        />
+
+    <TextView
+        android:id="@+id/text_telephone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Telephone"
+        android:layout_below="@id/name"
+        android:layout_margin="@dimen/appbar_padding_top"/>
+
+    <TextView
+        android:id="@+id/set_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="SET_NAME"
+        android:layout_margin="@dimen/appbar_padding_top"
+        android:layout_below="@+id/profile_image_tow"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/SET_telephone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="TELEPHONE_NUMBER"
+        android:layout_below="@+id/set_name_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/appbar_padding_top" />
+
+    <TextView
+        android:id="@+id/text_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Rank"
+        android:layout_below="@id/text_telephone"
+        android:layout_margin="@dimen/appbar_padding_top"/>
+
+    <ImageView
+        android:id="@+id/SET_Rank"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:src="@drawable/stars0"
+        android:layout_below="@+id/SET_telephone_number"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_rank" />
+
+
+</RelativeLayout>

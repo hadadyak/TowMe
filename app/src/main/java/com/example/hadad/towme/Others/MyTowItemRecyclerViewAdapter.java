@@ -33,7 +33,7 @@ public class MyTowItemRecyclerViewAdapter extends RecyclerView.Adapter<MyTowItem
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.mIndex.setText("" + position);
         holder.mFirstName.setText(mValues.get(position).getFirstName());
@@ -45,7 +45,7 @@ public class MyTowItemRecyclerViewAdapter extends RecyclerView.Adapter<MyTowItem
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(position);
                 }
             }
         });

@@ -4,8 +4,9 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/rank_bt"
@@ -14,6 +15,7 @@
             android:textSize="15sp"
             android:layout_width="120dp"
             android:layout_height="40dp"
+            android:layout_centerVertical="true"
             android:background="@drawable/buttonshape"/>
 
         <Button
@@ -24,7 +26,7 @@
             android:layout_width="120dp"
             android:layout_height="40dp"
             android:background="@drawable/buttonshape"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -37,7 +39,26 @@
             android:layout_width="120dp"
             android:layout_height="40dp"
             android:background="@drawable/buttonshape"
-            android:layout_alignParentTop="true" />
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:src="@drawable/triangle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/arrow_up"
+            android:layout_above="@+id/dist_bt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="3dp"  />
+
+        <ImageView
+            android:src="@drawable/triangle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:rotation="180"
+            android:id="@+id/arrow_down"
+            android:layout_below="@+id/dist_bt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp" />
     </RelativeLayout>
 
 </FrameLayout>
