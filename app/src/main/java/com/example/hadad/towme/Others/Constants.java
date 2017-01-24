@@ -11,6 +11,8 @@ public class Constants {
     public static final String TOW_TABLE_NAME = "Tow";
     public static final String Comment_TABLE = "Comments";
     public static final String TRANSACTION_TABLE_NAME = "Transactions";
+    public static final String BUCKET_NAME = "s31234324";
+    public static final String OBJECT_KEY="4my-TowMe";
 
     public enum MainActivityState{
         DIVIDED,
@@ -20,7 +22,8 @@ public class Constants {
 
     public enum DynamoDBManagerType {
         ADD_TRANSACTION,
-        GET_USER_BY_NAME,
+        GET_USER_BY_ID,
+        USER_NON_EXIST,
         GET_TABLE_STATUS,
         CREATE_TABLE,
         INSERT_USER,

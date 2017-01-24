@@ -7,13 +7,19 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.hadad.towme.DynamoDB.AmazonClientManager;
+import com.example.hadad.towme.DynamoDB.DynamoDBManagerTask;
+import com.example.hadad.towme.DynamoDB.MyQuery;
+import com.example.hadad.towme.Others.Constants;
+import com.example.hadad.towme.Others.UserProfile;
+import com.example.hadad.towme.Tables.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements DynamoDBManagerTask.DynamoDBManagerTaskResponse{
 
     CallbackManager callbackManager;
     ProfileTracker fbProfileTracker;
@@ -24,26 +30,29 @@ public class SplashActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         clientManager = new AmazonClientManager(this);
         callbackManager = CallbackManager.Factory.create();
-        fbProfileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                // User logged in or changed profile
-            }
-        };
-
+        LoginManager.getInstance().logOut();
+        final DynamoDBManagerTask getUser = new DynamoDBManagerTask(this);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent;
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    intent = new Intent(SplashActivity.this, MainActivity.class);
+                if (Profile.getCurrentProfile() != null && AccessToken.getCurrentAccessToken() != null) {
+                    MyQuery<User> query= new MyQuery<User>(Constants.DynamoDBManagerType.GET_USER_BY_ID,new User(Long.parseLong(Profile.getCurrentProfile().getId())));
+                    getUser.execute(query);
                 }else {
-                    intent = new Intent(SplashActivity.this, LoginActivty.class);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivty.class);
+                    startActivity(intent);
+                    finish();
                 }
-                startActivity(intent);
-                finish();
             }
         }, 100);
     }
 
+    @Override
+    public void DynamoDBManagerTaskResponse(MyQuery myQ) {
+        if(myQ.getType() == Constants.DynamoDBManagerType.GET_USER_BY_ID) {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            UserProfile.setUser((User) myQ.getContent());
+            startActivity(intent);
+        }
+    }
 }

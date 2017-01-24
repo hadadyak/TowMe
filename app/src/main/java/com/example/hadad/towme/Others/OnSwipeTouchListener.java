@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.example.hadad.towme.Activities.ButtonsFragments;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 

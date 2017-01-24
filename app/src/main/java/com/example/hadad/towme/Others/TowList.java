@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class TowList {
-    public static final List<Tow> ITEMS = new ArrayList<Tow>();
+    public static final ArrayList<Tow> ITEMS = new ArrayList<Tow>();
 
     public static void addItem(Tow item) {
         ITEMS.add(item);
@@ -18,6 +18,9 @@ public class TowList {
     public static void hardCopy(ArrayList<Tow> tows){
         ITEMS.clear();
         ITEMS.addAll(tows);
+    }
+    public static int size(){
+        return ITEMS.size();
     }
     public static Tow getTow(int pos){
         return ITEMS.get(pos);

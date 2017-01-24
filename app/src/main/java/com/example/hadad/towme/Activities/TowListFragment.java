@@ -64,10 +64,9 @@ public class TowListFragment extends Fragment implements DynamoDBManagerTask.Dyn
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-        DynamoDBManagerTask TaskTow = new DynamoDBManagerTask();
-//
-        TaskTow.mListener = this;
-        TaskTow.execute(new MyQuery<ArrayList<Tow>>(Constants.DynamoDBManagerType.LIST_TOW));
+        DynamoDBManagerTask TaskTow = new DynamoDBManagerTask(this);
+
+        TaskTow.execute(new MyQuery<ArrayList<Tow>>(Constants.DynamoDBManagerType.LIST_TOW,null));
     }
 
 
@@ -113,6 +112,9 @@ public class TowListFragment extends Fragment implements DynamoDBManagerTask.Dyn
         void onListFragmentInteraction(int pos);
     }
 
+    public void notifyList(){
+        recAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void DynamoDBManagerTaskResponse(MyQuery myQ) {

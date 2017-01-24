@@ -107,27 +107,6 @@ public class DynamoDBManager {
         }
     }
 
-    public static ArrayList<Tow> OrderByPrice() {
-        ArrayList<Tow> tows = getTowList();
-               /* Sorting of arraylist using Collections.sort*/
-        Collections.sort(tows, new PriceComparator());
-        return tows;
-    }
-
-    //normaliezed all distance of the tows to current user (y-y and x-x)
-    public static ArrayList<Tow> nnormalizedDistaceVector(ArrayList<Tow> tows,User user) {
-        for (Tow tow:tows) {
-            tow.setX(tow.getX()-user.getX());
-            tow.setX(tow.getY()-user.getY());
-        }
-        return tows;
-    }
-    public static ArrayList<Tow> SortByDistance(User user){
-        ArrayList<Tow> tows = nnormalizedDistaceVector(getTowList(),user); //nomaleiad according to current user
-               /* Sorting of arraylist using Collections.sort*/
-        Collections.sort(tows, new DistanceComparator());
-        return tows;
-    }
 
     public static ArrayList<Tow> OrderByRank(){
         ArrayList<Tow> tows = getTowList();
@@ -221,20 +200,14 @@ public class DynamoDBManager {
         }
     }
 
-    public static User getUserByName(String userName) {
+    public static User getUserByID(long id) {
         AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
         // DynamoDBMapperConfig config=new DynamoDBMapperConfig();
         User user = new User();
-        if (userName == null)
-            user.setFirstName("yakir");
-        // user.setId(99);
-        User Answer = mapper.load(user);
-        if (Answer != null)
-            System.out.println(" " + Answer.getFirstName() + " " + Answer.getId());
-        else
-            System.out.println("error the query did not succed");
-        return Answer;
+        user.setId(id);
+        User us = mapper.load(user);
+        return us;
     }
 
     /*

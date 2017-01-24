@@ -1,6 +1,5 @@
 package com.example.hadad.towme.Activities;
 
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,9 +22,10 @@ import android.widget.TextView;
 import com.example.hadad.towme.Others.TowList;
 import com.example.hadad.towme.R;
 import com.example.hadad.towme.Tables.Tow;
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
-public class TowProfile extends AppCompatActivity {
+public class TowProfileActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -56,7 +56,7 @@ public class TowProfile extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setCurrentItem(getIntent().getIntExtra("position",0));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,6 @@ public class TowProfile extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -121,7 +120,9 @@ public class TowProfile extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tow_profile, container, false);
-            Tow tow = TowList.getTow(getActivity().getIntent().getIntExtra("position",0));
+            int index = getActivity().getIntent().getIntExtra("position",0);
+            index=getArguments().getInt(ARG_SECTION_NUMBER);
+            Tow tow = TowList.getTow(index);
             Picasso.with(getContext()).load("http://vignette3.wikia.nocookie.net/worldofcarsdrivein/images/e/ee/Mater.png/revision/latest?cb=20111006091530").into((ImageView)rootView.findViewById(R.id.profile_image_tow));
 
             TextView name = (TextView)rootView.findViewById(R.id.set_name_text);
@@ -146,13 +147,12 @@ public class TowProfile extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return TowList.size();
         }
 
         @Override

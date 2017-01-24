@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -37,13 +39,23 @@
             android:value="@string/google_maps_app_id" />
 
         <activity android:name=".Activities.LoginActivty" />
-        <activity android:name=".Activities.RegisterActivty" />
+        <activity android:name=".Activities.EditProfileActivity" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.CameraActivity" />
         <activity
-            android:name=".Activities.TowProfile"
+            android:name=".Activities.TowProfileActivity"
             android:label="@string/title_activity_tow_profile"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.PhoneNumberActivity"></activity>
+
+        <receiver android:name=".Others.SMSBReceiver" >
+            <intent-filter android:priority="999" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
     </application>
 
 </manifest>

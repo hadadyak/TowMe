@@ -40,7 +40,6 @@ dependencies {
     compile 'com.facebook.android:audience-network-sdk:4.+'
     compile 'com.facebook.android:account-kit-sdk:4.+'
     compile 'com.google.android.gms:play-services:10.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:recyclerview-v7:25.0.1'
@@ -48,6 +47,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.+'
     compile 'com.amazonaws:aws-android-sdk-ddb:2.2.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.2.+'
     //compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
 }

@@ -16,24 +16,23 @@ public  class User {
     private String firstName;
     private String lastName;
     private String Mail;
-    private Long Telephone;
+    private String Telephone;
     private int carWeight;
     private String carType;
     private float x;
     private float y;
 
+    public User(){}
+    public User(Long id){this.Id = id;}
     public float getX() {
         return x;
     }
-
     public void setX(float x) {
         this.x = x;
     }
-
     public float getY() {
         return y;
     }
-
     public void setY(float y) {
         this.y = y;
     }
@@ -72,11 +71,11 @@ public  class User {
     }
 
     @DynamoDBAttribute(attributeName = "Telephone")
-    public Long getTelephone() {
+    public String getTelephone() {
         return Telephone;
     }
 
-    public void setTelephone(Long Telephone) {
+    public void setTelephone(String Telephone) {
         this.Telephone = Telephone;
     }
 

@@ -12,12 +12,11 @@ import java.util.ArrayList;
 
 public class MyQuery <T>{
     private Constants.DynamoDBManagerType type;
-    private String Table;
-    private int TableType;
     private T Content;
 
-    public MyQuery(Constants.DynamoDBManagerType type){
+    public MyQuery(Constants.DynamoDBManagerType type,T content){
         this.type = type;
+        this.Content = content;
     }
     public Constants.DynamoDBManagerType getType() {
         return type;
@@ -25,22 +24,6 @@ public class MyQuery <T>{
 
     public void setType(Constants.DynamoDBManagerType type) {
         this.type = type;
-    }
-
-    public String getTable() {
-        return Table;
-    }
-
-    public void setTable(String table) {
-        Table = table;
-    }
-
-    public int getTableType() {
-        return TableType;
-    }
-
-    public void setTableType(int tableType) {
-        TableType = tableType;
     }
 
     public  T getContent() {

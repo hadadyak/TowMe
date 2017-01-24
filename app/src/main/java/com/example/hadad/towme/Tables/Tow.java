@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @DynamoDBTable(tableName = Constants.TOW_TABLE_NAME )
 public  class Tow  {
     private int Id;
-    private float Rank;
+    private int Rank;
     private double PricePerKM;
     private double PricePerWeight;
     private int Customers;
@@ -66,7 +66,7 @@ public  class Tow  {
 
     //1-5 like stars
     @DynamoDBAttribute(attributeName ="Rank")
-    public float getRank() {
+    public int getRank() {
         return Rank;
     }
 
@@ -130,7 +130,7 @@ public  class Tow  {
     public void setMail(String mail) {
         Mail = mail;
     }
-    public void setRank(float rank) {
+    public void setRank(int rank) {
         Rank = rank;
     }
     public void setId(int id) {

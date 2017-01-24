@@ -2,6 +2,11 @@
     <string name="app_name">TowMe</string>
     <string name="facebook_app_id">1839536472960571</string>
     <string name="google_maps_app_id">AIzaSyDVrZ6LMUCTKfGy72Z7arosz7MvSOsxcwo</string>
+
+    <string-array name="prefixNumbers">
+        <item>+972</item>
+    </string-array>
+
     <string-array name="planets_array">
         <item>Mercury</item>
         <item>Venus</item>
@@ -18,5 +23,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_tow_profile">TowProfile</string>
     <string name="action_settings">Settings</string>
+    <string name="log_out">Log out</string>
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>

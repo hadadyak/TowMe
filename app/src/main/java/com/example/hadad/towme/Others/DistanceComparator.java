@@ -9,9 +9,16 @@ import java.util.Comparator;
  */
 
 public class DistanceComparator implements Comparator<Tow> {
+    public double x0,y0;
+
+    public DistanceComparator(double x0,double y0){
+        this.x0=x0;
+        this.y0=y0;
+    }
+
     public int compare(Tow o1, Tow o2) {
-        double distanceVector1=Math.sqrt(o1.getX()*o1.getX()+o1.getY()*o1.getY());
-        double distanceVector2=Math.sqrt(o2.getX()*o2.getX()+o2.getY()*o2.getY());
+        double distanceVector1=(o1.getX()-x0)*(o1.getX()-x0)+(o1.getY()-y0)*(o1.getY()-y0);
+        double distanceVector2=(o2.getX()-x0)*(o2.getX()-x0)+(o2.getY()-y0)*(o2.getY()-y0);
         if (distanceVector1 > distanceVector2)
             return 1;
         else if (distanceVector1< distanceVector2)
