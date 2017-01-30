@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.hadad.towme.Others.CommentsTable;
 import com.example.hadad.towme.Others.Constants;
 import com.example.hadad.towme.Tables.Comment;
+import com.example.hadad.towme.Tables.Tow;
 import com.example.hadad.towme.Tables.Transaction;
 import com.example.hadad.towme.Tables.User;
 
@@ -58,6 +59,24 @@ public class DynamoDBManagerTask extends AsyncTask<MyQuery, Integer, MyQuery> {
                 Log.d("DBTask","update user");
                 DynamoDBManager.insertUsers((User) query[0].getContent());
 //                DynamoDBManager.updateUser((User) query[0].getContent());
+                break;
+            case UPDATE_TOW:
+                Log.d("DBTask","update tow");
+                DynamoDBManager.insertTow((Tow) query[0].getContent());
+                break;
+            case GET_TOW_BY_ID:
+                Log.d("DBTask","get tow by ID");
+                id = ((Tow) query[0].getContent()).getId();
+                MyQuery<Tow> answerTow = new MyQuery(Constants.DynamoDBManagerType.GET_TOW_BY_ID, DynamoDBManager.getTowByID(id));
+                if (answerTow.getContent() == null) {
+                    query[0].setType(Constants.DynamoDBManagerType.TOW_NON_EXIST);
+                    return query[0];
+                }
+                answerTow.setType(Constants.DynamoDBManagerType.GET_TOW_BY_ID);
+                return answerTow;
+            case GET_ACTIVE_TOWS:
+                Log.d("dbTAsk","GET_ACTIVE_TOWS");
+                query[0].setContent(DynamoDBManager.geActiveTows());
                 break;
         }
         return query[0];

@@ -34,6 +34,8 @@ public class Constants {
         ADD_COMMENTS_RES,
         GET_TOW_BY_ID,
         UPDATE_TOW,
+        GET_ACTIVE_TOWS,
+        TOW_NON_EXIST
 
     }
 }

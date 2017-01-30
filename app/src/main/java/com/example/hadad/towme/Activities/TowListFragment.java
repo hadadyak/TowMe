@@ -32,7 +32,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnTowListFragmentInteractionListener}
  * interface.
  */
-public class TowListFragment extends Fragment implements DynamoDBManagerTask.DynamoDBManagerTaskResponse{
+public class TowListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -64,9 +64,6 @@ public class TowListFragment extends Fragment implements DynamoDBManagerTask.Dyn
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-        DynamoDBManagerTask TaskTow = new DynamoDBManagerTask(this);
-
-        TaskTow.execute(new MyQuery<ArrayList<Tow>>(Constants.DynamoDBManagerType.LIST_TOW,null));
     }
 
 
@@ -116,11 +113,4 @@ public class TowListFragment extends Fragment implements DynamoDBManagerTask.Dyn
         recAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void DynamoDBManagerTaskResponse(MyQuery myQ) {
-        if (myQ.getContent() instanceof ArrayList ) {
-            TowList.hardCopy((ArrayList<Tow>) myQ.getContent());
-            recAdapter.notifyDataSetChanged();
-        }
-    }
 }

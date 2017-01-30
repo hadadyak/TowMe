@@ -239,6 +239,21 @@ public class DynamoDBManager {
         return null;
     }
 
+    public static void insertTow(Tow tow) {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+        try {
+
+            //------> detailes that should come from the facebook login activity
+            Log.d(TAG, "Inserting tow");
+            mapper.save(tow);
+            Log.d(TAG, "tow was inserted");
+        } catch (AmazonServiceException ex) {
+            Log.e(TAG, "Error inserting tow");
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
+        }
+    }
+
     /*
  * Inserts ten users with userNo from 1 to 10 and random names.
  */
@@ -255,6 +270,45 @@ public class DynamoDBManager {
             Log.e(TAG, "Error inserting comment");
             SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
+    }
+
+    //Scan with user name of patient -> find ID8888888888888888
+    public static ArrayList<Tow> geActiveTows() {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
+        DynamoDBMapper mapper2 = new DynamoDBMapper(ddb);
+        String active="yes";
+        //------search and save only with same userFacebook ----------
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":val1", new AttributeValue().withS(active));
+        DynamoDBScanExpression scanExpression2 = new DynamoDBScanExpression()
+                .withFilterExpression("Active = :val1 ")
+                .withExpressionAttributeValues(eav);
+        try {
+            PaginatedScanList<Tow> result2 = mapper2.scan(
+                    Tow.class, scanExpression2);
+
+            ArrayList<Tow> resultList2 = new ArrayList<Tow>();
+            resultList2.addAll(result2);
+//            for (Tow up : result2) {
+//
+//                resultList2.add(up);
+//            }
+            return resultList2;
+
+        } catch (AmazonServiceException ex) {
+            SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
+        }
+
+        return null;
+    }
+
+    public static Tow getTowByID(long id) {
+        AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
+        DynamoDBMapper mapper = new DynamoDBMapper(ddb);
+        // DynamoDBMapperConfig config=new DynamoDBMapperConfig();
+        Tow tow= new Tow(id);
+        Tow us = mapper.load(tow);
+        return us;
     }
 
     /*
