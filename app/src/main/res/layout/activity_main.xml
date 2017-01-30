@@ -71,7 +71,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignLeft="@+id/arrow_down"
             android:layout_alignStart="@+id/arrow_down" />
+
     </RelativeLayout>
+
 
     <LinearLayout android:name="com.example.hadad.towme.TowListFragment"
         android:id="@+id/frag_list_tow"

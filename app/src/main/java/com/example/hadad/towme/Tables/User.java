@@ -10,8 +10,8 @@ import com.example.hadad.towme.Others.Constants;
  */
 
 
-@DynamoDBTable(tableName = Constants.User_TABLE_NAME )
-public  class User {
+@DynamoDBTable(tableName = Constants.User_TABLE_NAME)
+public class User {
     private Long Id;
     private String firstName;
     private String lastName;
@@ -19,28 +19,44 @@ public  class User {
     private String Telephone;
     private int carWeight;
     private String carType;
-    private float x;
-    private float y;
+    private double Latitude;
+    private double Longitude;
+    private String PicUrl;
 
-    public User(){}
-    public User(Long id){this.Id = id;}
-    public float getX() {
-        return x;
-    }
-    public void setX(float x) {
-        this.x = x;
-    }
-    public float getY() {
-        return y;
-    }
-    public void setY(float y) {
-        this.y = y;
+    public User() {
     }
 
+    public User(Long id) {
+        this.Id = id;
+    }
 
-//    private ArrayList<Tow> TowsAvailable;
-    //   private ArrayList<Tow> HistoryTows;
-    //  private bitmap Picture;
+    @DynamoDBAttribute(attributeName = "PicUrl")
+    public String getPicUrl() {
+        return this.PicUrl;
+    }
+
+    public void setPicUrl(String photo) {
+        this.PicUrl = photo;
+    }
+
+
+    @DynamoDBAttribute(attributeName = "Latitude")
+    public double getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(double Latitude) {
+        this.Latitude = Latitude;
+    }
+
+    @DynamoDBAttribute(attributeName = "Longitude")
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(double Longitude) {
+        this.Longitude = Longitude;
+    }
 
 
     @DynamoDBHashKey(attributeName = "Id") //primary key
@@ -107,29 +123,6 @@ public  class User {
         this.Mail = Mail;
     }
 
-//    Tow getLastToe() {
-//        Tow tow = new Tow();
-//        return tow;
-//    }
-//
-//    ArrayList<Tow> getPreviousToes() {
-//        //query to get prevous tows
-//        return HistoryTows;
-//    }
-
-//    void TowHelped(Tow tow) {
-//    }//Add Tow to the history
-//
-//    ArrayList<Tow> getClosestTows(User user, int rad) {
-//        //query to get closest tow's
-//        return TowsAvailable;
-//    }
-//
-//    ArrayList<Tow> getCheapestTows(User user) {
-//        //query to get cheapest tow
-//        ArrayList<Tow> CheapestTows = new ArrayList<Tow>();
-//        return CheapestTows;
-//    }
 
 }
 

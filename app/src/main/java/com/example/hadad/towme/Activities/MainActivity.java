@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.example.hadad.towme.Activities.TowListFragment.OnListFragmentInteractionListener;
 import com.example.hadad.towme.DynamoDB.AmazonClientManager;
 import com.example.hadad.towme.Others.Constants;
 import com.example.hadad.towme.Others.DistanceComparator;
@@ -31,7 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,OnListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,TowListFragment.OnTowListFragmentInteractionListener{
 
     public static AmazonClientManager clientManager;
     private Constants.MainActivityState State = Constants.MainActivityState.DIVIDED;
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void SortByDistance(User user){
-        Collections.sort(TowList.ITEMS,new DistanceComparator(user.getX(),user.getY()) );
+        Collections.sort(TowList.ITEMS,new DistanceComparator(user.getLatitude(),user.getLongitude()) );
     }
 
     private void SortByPrice() {

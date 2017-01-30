@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @DynamoDBTable(tableName = Constants.TOW_TABLE_NAME )
 public  class Tow  {
-    private int Id;
+    private Long Id;
     private int Rank;
     private double PricePerKM;
     private double PricePerWeight;
@@ -24,9 +24,27 @@ public  class Tow  {
     private String firstName;
     private String lastName;
     private String Mail;
-    private float x;
-    private float y;
+    private double Latitude;
+    private double Longitude;
+    String Active;
     String PicUrl;
+
+    @DynamoDBAttribute(attributeName ="Active")
+    public String getActive() {
+        return Active;
+    }
+
+    public void setActive(String active) {
+        Active = active;
+    }
+
+
+
+    public Tow(Long id) {
+        this.Id = id;
+    }
+
+    public Tow() {}
     @DynamoDBAttribute(attributeName ="PicUrl")
     public String getPicUrl() {
         return PicUrl;
@@ -36,21 +54,22 @@ public  class Tow  {
         PicUrl = picUrl;
     }
 
-    @DynamoDBAttribute(attributeName ="x")
-    public float getX() {
-        return x;
+    @DynamoDBAttribute(attributeName ="Latitude")
+    public double getLatitude() {
+        return Latitude;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-    @DynamoDBAttribute(attributeName ="y")
-    public float getY() {
-        return y;
+    public void setLatitude(double Latitude) {
+        this.Latitude = Latitude;
     }
 
-    public void setY(float y) {
-        this.y = y;
+    @DynamoDBAttribute(attributeName ="Longitude")
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(double Longitude) {
+        this.Longitude = Longitude;
     }
 
 
@@ -60,7 +79,7 @@ public  class Tow  {
     //  ArrayList<Coment> Comments;
 
     @DynamoDBHashKey(attributeName = "Id") //primary key
-    public int getId() {
+    public Long getId() {
         return Id;
     }
 
@@ -133,7 +152,7 @@ public  class Tow  {
     public void setRank(int rank) {
         Rank = rank;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         Id = id;
     }
     public void setStartWorkingTime(int startWorkingTime) {this.startWorkingTime = startWorkingTime;}

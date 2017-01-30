@@ -143,20 +143,29 @@ public class DynamoDBManager {
         }
         return null;
     }
-    public static ArrayList<Comment> getCommentList() {
+
+    public static ArrayList<Comment> getCommentListById(Long id) {
         AmazonDynamoDBClient ddb = SplashActivity.clientManager.ddb();
         DynamoDBMapper mapper2 = new DynamoDBMapper(ddb);
-        DynamoDBScanExpression scanExpression2 = new DynamoDBScanExpression();
+//        String active="yes";
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":val1", new AttributeValue().withN(id+""));
+        DynamoDBScanExpression scanExpression2 = new DynamoDBScanExpression()
+                .withFilterExpression("TowId = :val1 ")
+                .withExpressionAttributeValues(eav);
         try {
-            PaginatedScanList<Comment> result = mapper2.scan(Comment.class, scanExpression2);
-            ArrayList<Comment> resultList = new ArrayList<Comment>();
-            for (Comment up : result) {
-                resultList.add(up);
-            }
-            return resultList;
+            PaginatedScanList<Comment> result2 = mapper2.scan(Comment.class, scanExpression2);
+
+            ArrayList<Comment> resultList2 = new ArrayList<Comment>();
+
+            resultList2.addAll(result2);
+            return resultList2;
+
+
         } catch (AmazonServiceException ex) {
             SplashActivity.clientManager.wipeCredentialsOnAuthError(ex);
         }
+
         return null;
     }
     /*
@@ -233,24 +242,14 @@ public class DynamoDBManager {
     /*
  * Inserts ten users with userNo from 1 to 10 and random names.
  */
-    public static void insertComment(String commentStr, int id) {
+    public static void insertComment(Comment comm) {
         AmazonDynamoDBClient ddb = SplashActivity.clientManager
                 .ddb();
         DynamoDBMapper mapper = new DynamoDBMapper(ddb);
 
         try {
 
-            Comment comment = new Comment();
-            if (id == 0)
-                id = 10;
-            comment.setId(id);
-            if (commentStr == null)
-                commentStr = "exapmle comment";
-            comment.setComment(commentStr);
-
-            Log.d(TAG, "Inserting comment");
-            mapper.save(comment);
-            Log.d(TAG, "comment inserted");
+            mapper.save(comm);
 
         } catch (AmazonServiceException ex) {
             Log.e(TAG, "Error inserting comment");

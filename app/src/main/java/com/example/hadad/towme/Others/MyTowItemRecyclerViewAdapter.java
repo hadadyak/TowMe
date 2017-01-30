@@ -9,19 +9,19 @@ import android.widget.TextView;
 
 import com.example.hadad.towme.R;
 import com.example.hadad.towme.Tables.Tow;
-import com.example.hadad.towme.Activities.TowListFragment.OnListFragmentInteractionListener;
+import com.example.hadad.towme.Activities.TowListFragment.OnTowListFragmentInteractionListener;
 import java.util.List;
 
 /**
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link OnTowListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyTowItemRecyclerViewAdapter extends RecyclerView.Adapter<MyTowItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<Tow> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnTowListFragmentInteractionListener mListener;
 
-    public MyTowItemRecyclerViewAdapter(List<Tow> items, OnListFragmentInteractionListener listener) {
+    public MyTowItemRecyclerViewAdapter(List<Tow> items, OnTowListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -40,8 +40,8 @@ public class MyTowItemRecyclerViewAdapter extends RecyclerView.Adapter<MyTowItem
         holder.mFirstName.setText(mValues.get(position).getFirstName());
         holder.mPrice.setText(mValues.get(position).getPricePerKM()+"");
 
-        double x1= mValues.get(position).getX()-UserProfile.getUser().getX();
-        double y1= mValues.get(position).getY()-UserProfile.getUser().getY();
+        double x1= mValues.get(position).getLatitude()-UserProfile.getUser().getLatitude();
+        double y1= mValues.get(position).getLongitude()-UserProfile.getUser().getLongitude();
         double dist = Math.sqrt(x1*x1+y1*y1);
         holder.mDistance.setText(String.format("%.2f",dist));
 

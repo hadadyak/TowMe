@@ -22,7 +22,7 @@ import com.facebook.login.LoginManager;
 public class SplashActivity extends AppCompatActivity implements DynamoDBManagerTask.DynamoDBManagerTaskResponse{
 
     CallbackManager callbackManager;
-    ProfileTracker fbProfileTracker;
+    ProfileTracker mProfileTracker;
     public static AmazonClientManager clientManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +30,11 @@ public class SplashActivity extends AppCompatActivity implements DynamoDBManager
         FacebookSdk.sdkInitialize(getApplicationContext());
         clientManager = new AmazonClientManager(this);
         callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().logOut();
         final DynamoDBManagerTask getUser = new DynamoDBManagerTask(this);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (Profile.getCurrentProfile() != null && AccessToken.getCurrentAccessToken() != null) {
+                if ( Profile.getCurrentProfile() != null && AccessToken.getCurrentAccessToken() != null) {
                     MyQuery<User> query= new MyQuery<User>(Constants.DynamoDBManagerType.GET_USER_BY_ID,new User(Long.parseLong(Profile.getCurrentProfile().getId())));
                     getUser.execute(query);
                 }else {
@@ -53,6 +52,10 @@ public class SplashActivity extends AppCompatActivity implements DynamoDBManager
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             UserProfile.setUser((User) myQ.getContent());
             startActivity(intent);
+        }else{
+            Intent intent = new Intent(SplashActivity.this, LoginActivty.class);
+            startActivity(intent);
+            finish();
         }
     }
 }

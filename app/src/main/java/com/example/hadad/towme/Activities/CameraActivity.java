@@ -6,18 +6,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,8 +33,12 @@ import android.widget.ImageButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.example.hadad.towme.Others.CameraPreview;
 import com.example.hadad.towme.R;
+import com.facebook.Profile;
+
+import static android.os.Environment.DIRECTORY_DCIM;
 
 public class CameraActivity extends Activity {
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -103,7 +115,7 @@ public class CameraActivity extends Activity {
     //--------------------------------------------------
 
 
-    private PictureCallback mPicture = new PictureCallback() {
+    public PictureCallback mPicture = new PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
@@ -115,6 +127,7 @@ public class CameraActivity extends Activity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
+                finish();
             } catch (FileNotFoundException e) {
                 Log.d("cameraA", "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -125,11 +138,11 @@ public class CameraActivity extends Activity {
     };
 /////-----------------The-File-Creating----------------------------
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    private  File getOutputMediaFile(int type){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "asaf pic");//add sub directory inside DIRECTORY_PICTURES (where you want to save the pic)
+                DIRECTORY_DCIM),"profile");//add sub directory inside DIRECTORY_PICTURES (where you want to save the pic)
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
         // Create the storage directory if it does not exist
@@ -140,17 +153,20 @@ public class CameraActivity extends Activity {
             }
         }
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
+            Long id=Long.parseLong(Profile.getCurrentProfile().getId());
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
+                    id + ".jpg");
+            Log.d("path=",mediaFile.getPath());
         } else {
             return null;
         }
 
         return mediaFile;
     }
+
 
 
     //==============Opening and Closing Function For The Camera================
@@ -161,7 +177,7 @@ public class CameraActivity extends Activity {
             setContentView(R.layout.activity_camera);
             mCamera = getCameraInstance();
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                mCamera.setDisplayOrientation(90);
+                mCamera.setDisplayOrientation(270); //was 90 i chamgrd it to 0 --------
             }
 
             // Create our Preview view and set it as the content of our activity.

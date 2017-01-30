@@ -24,15 +24,16 @@ public class Constants {
         ADD_TRANSACTION,
         GET_USER_BY_ID,
         USER_NON_EXIST,
-        GET_TABLE_STATUS,
-        CREATE_TABLE,
+        UPDATE_USER,
         INSERT_USER,
         LIST_TOW,
         DELETE_USER_TABLE,
         LIST_COMMENTS,
+        LIST_COMMENTS_RES,
         ADD_COMMENTS,
-        ORDERBYPRICE,
-        ORDERBYDISTANCE,
-        ORDERBYRANK
+        ADD_COMMENTS_RES,
+        GET_TOW_BY_ID,
+        UPDATE_TOW,
+
     }
 }

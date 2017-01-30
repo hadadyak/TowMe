@@ -3,7 +3,9 @@ package com.example.hadad.towme.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +39,7 @@ import com.example.hadad.towme.DynamoDB.MyQuery;
 import com.example.hadad.towme.Others.Constants;
 import com.example.hadad.towme.Others.Util;
 import com.example.hadad.towme.R;
+import com.example.hadad.towme.Tables.Tow;
 import com.example.hadad.towme.Tables.User;
 import com.facebook.Profile;
 
@@ -45,8 +49,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.os.Environment.DIRECTORY_DCIM;
 
-public class EditProfileActivity extends AppCompatActivity implements DynamoDBManagerTask.DynamoDBManagerTaskResponse{
+
+public class EditProfileActivity extends Activity implements DynamoDBManagerTask.DynamoDBManagerTaskResponse {
 
     private String carType;
     private static final int INDEX_NOT_CHECKED = -1;
@@ -55,7 +61,11 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
     private List<TransferObserver> observers;
     private ArrayList<HashMap<String, Object>> transferRecordMaps;
     private int checkedIndex;
-    private String path="";
+    private int flag;  //flag=1 famera
+    private String path = "";
+    private Long id=Long.parseLong(Profile.getCurrentProfile().getId());
+    private Uri uriGalleryPic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +74,6 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
         transferUtility = Util.getTransferUtility(this);
         checkedIndex = INDEX_NOT_CHECKED;
         transferRecordMaps = new ArrayList<HashMap<String, Object>>();
-
         Spinner spinner = (Spinner) findViewById(R.id.carTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
@@ -106,44 +115,57 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
         ImageView cameraImg = (ImageView) findViewById(R.id.CameraImageView);
         cameraImg.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                flag = 1;
                 Intent intent = new Intent(EditProfileActivity.this, CameraActivity.class);
                 startActivity(intent);
             }
         });
         final DynamoDBManagerTask getUser = new DynamoDBManagerTask(this);
-        Button saveBt = (Button)findViewById(R.id.saveButton);
+        Button saveBt = (Button) findViewById(R.id.saveButton);
         saveBt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MyQuery<User> getQuery = new MyQuery<User>( Constants.DynamoDBManagerType.GET_USER_BY_ID,new User(Long.parseLong(Profile.getCurrentProfile().getId())));
+                MyQuery<User> getQuery = new MyQuery<User>(Constants.DynamoDBManagerType.GET_USER_BY_ID, new User(Long.parseLong(Profile.getCurrentProfile().getId())));
                 getUser.execute(getQuery);
+                if (path != null) {
+                    if (!path.equals(""))
+                        beginUpload(path);
+                    if(flag!=1)
+                        getQuery.getContent().setPicUrl("https://s3.amazonaws.com/s31234324/"+id+".jpg");
+                    else
+                        getQuery.getContent().setPicUrl("https://s3.amazonaws.com/s31234324/"+uriGalleryPic+".jpg");
+                    final DynamoDBManagerTask updateUser = new DynamoDBManagerTask(EditProfileActivity.this);
+                    MyQuery<User> update = new MyQuery<User>(Constants.DynamoDBManagerType.UPDATE_USER, getQuery.getContent());
+                    updateUser.execute(update);
 
-                if(!path.equals(""))
-                    beginUpload(path);
+                }
                 Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-        if ( resultCode == RESULT_OK && null != data) {
-
+        Log.d("onActivityResult", "start");
+        if (resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             try {
-                path  = getPath(selectedImage);
+                if (flag != 1)
+                    path = getPath(selectedImage);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            ImageView image = (ImageView)findViewById(R.id.carPicImageView);
+            ImageView image = (ImageView) findViewById(R.id.carPicImageView);
             Bitmap bitmap = BitmapFactory.decodeFile(path);
+            if (bitmap == null)
+                Log.d("onActivityResult", bitmap.toString());
             image.setImageBitmap(bitmap);
 
             if (bitmap != null) {
                 //    ImageView rotate = (ImageView) findViewById(R.id.rotate);
-
             }
+
 
         } else {
 
@@ -207,7 +229,7 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
                     uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 selection = "_id=?";
-                selectionArgs = new String[] {
+                selectionArgs = new String[]{
                         split[1]
                 };
             }
@@ -227,6 +249,7 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
             } catch (Exception e) {
             }
         } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            uriGalleryPic=uri;
             return uri.getPath();
         }
         return null;
@@ -262,28 +285,41 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
         @Override
         public void onError(int id, Exception e) {
             Log.e(TAG, "Error during upload: " + id, e);
-//            updateList();
         }
 
         @Override
         public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
             Log.d(TAG, String.format("onProgressChanged: %d, total: %d, current: %d",
                     id, bytesTotal, bytesCurrent));
-//            updateList();
         }
 
         @Override
         public void onStateChanged(int id, TransferState newState) {
             Log.d(TAG, "onStateChanged: " + id + ", " + newState);
-//            updateList();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("edit", "onResume");
         // Get the data from any transfer's that have already happened,
-        initData();
+        if (flag == 1) {           //came from camera activity
+            ImageView image = (ImageView) findViewById(R.id.carPicImageView);
+            path = "/storage/emulated/0/DCIM/profile/"+id+".jpg";
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            if (bitmap == null)
+                Log.d("onActivityResult", bitmap.toString());
+            image.setImageBitmap(bitmap);
+
+//            if (bitmap != null) {
+//                    ImageView rotate = (ImageView) findViewById(R.id.rotate);
+//            }
+
+            flag = 0;
+        } else {
+            initData();
+        }
     }
 
     @Override
@@ -319,15 +355,15 @@ public class EditProfileActivity extends AppCompatActivity implements DynamoDBMa
                 observer.setTransferListener(listener);
             }
         }
-//        simpleAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void DynamoDBManagerTaskResponse(MyQuery myQ) {
-        if(myQ.getType() == Constants.DynamoDBManagerType.GET_USER_BY_ID) {
+        if (myQ.getType() == Constants.DynamoDBManagerType.GET_USER_BY_ID) {
             try {
                 ((MyQuery<User>) myQ).getContent().setcarWeight(Integer.parseInt(((EditText) findViewById(R.id.carWeightEditText)).getText().toString()));
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             ((MyQuery<User>) myQ).getContent().setcarType(carType);
             myQ.setType(Constants.DynamoDBManagerType.INSERT_USER);
             DynamoDBManagerTask inserUser = new DynamoDBManagerTask(this);

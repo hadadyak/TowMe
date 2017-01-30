@@ -5,57 +5,48 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.example.hadad.towme.Others.Constants;
 
+import java.util.UUID;
+
 /**
  * Created by Omer on 16-Jan-17.
  */
 
 @DynamoDBTable(tableName = Constants.Comment_TABLE)
 public class Comment {
-    private int Id;
-    private int TowId;
-    private String Author;
+
+    private String id;
+    private Long AuthorId;
+    private Long TowId;
     private String Comment;
-    private int Date;
+
+    public Comment(){}
+    public Comment(Long TowId,Long AuthorId, String Comment){
+        id = UUID.randomUUID().toString();
+        this.TowId = TowId;
+        this.AuthorId = AuthorId;
+        this.Comment = Comment;
+    }
 
     @DynamoDBHashKey(attributeName = "Id") //primary key
-    public int getId() {
-        return Id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setId(int id) {
-        Id = id;
-    }
+    @DynamoDBAttribute(attributeName ="AuthorId")
+    public Long getAuthorId() { return AuthorId; }
+    public void setAuthorId(Long authorId) { AuthorId = authorId; }
+
     @DynamoDBAttribute(attributeName ="TowId")
-    public int getTowId() {
+    public Long getTowId() {
         return TowId;
     }
-
-    public void setTowId(int towId) {
+    public void setTowId(Long towId) {
         TowId = towId;
     }
-    @DynamoDBAttribute(attributeName ="Author")
-    public String getAuthor() {
-        return Author;
-    }
 
-    public void setAuthor(String author) {
-        Author = author;
-    }
+
     @DynamoDBAttribute(attributeName ="Comment")
-    public String getComment() {
-        return Comment;
-    }
-    public void setComment(String comment) {
-        Comment = comment;
-    }
-    @DynamoDBAttribute(attributeName ="Date")
-    public int getDate() {
-        return Date;
-    }
-
-    public void setDate(int date) {
-        Date = date;
-    }
+    public String getComment() { return Comment; }
+    public void setComment(String comment) { Comment = comment; }
 
 
 }
